@@ -1,0 +1,66 @@
+﻿using System;
+using System.Windows.Forms;
+
+namespace GMD2Project___endless_running
+{
+    partial class Form1
+    {
+        /// <summary>
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        private System.Windows.Forms.PictureBox canvas;
+
+
+        /// <summary>
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Windows Form Designer generated code
+
+        /// <summary>
+        /// Required method for Designer support - do not modify
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            this.canvas = new System.Windows.Forms.PictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.canvas)).BeginInit();
+            this.SuspendLayout();
+            // 
+            // canvas
+            // 
+            this.canvas.Location = new System.Drawing.Point(0, 0);
+            this.canvas.Name = "canvas";
+            this.canvas.Size = new System.Drawing.Size(1268, 602);
+            this.canvas.TabIndex = 0;
+            this.canvas.TabStop = false;
+            // 
+            // Form1
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.ClientSize = new System.Drawing.Size(1268, 604);
+            this.Controls.Add(this.canvas);
+            this.Name = "Form1";
+            this.Text = "Endless Runner";
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.KeysPressedSetter);
+            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.KeysUnPressedSetter);
+            ((System.ComponentModel.ISupportInitialize)(this.canvas)).EndInit();
+            this.ResumeLayout(false);
+        }
+
+        #endregion
+    }
+}
+
