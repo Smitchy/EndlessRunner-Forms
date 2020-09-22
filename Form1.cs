@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -21,8 +22,11 @@ namespace GMD2Project___endless_running
 
         private TimeSpan lastUpdate = System.DateTime.Now.TimeOfDay;
 
-
         private bool spacePressed;
+
+        private TimeSpan fixedUpdateInterval = new TimeSpan(166667);
+
+        private TimeSpan timeForFixedUpdates = new TimeSpan(0);
 
         public Form1()
         {
@@ -46,7 +50,7 @@ namespace GMD2Project___endless_running
             while (running)
             {
                 HandleInput();
-
+                FixedUpdate();
                 Update();
                 Render();
             }
@@ -80,11 +84,22 @@ namespace GMD2Project___endless_running
             }
         }
 
+        private void FixedUpdate()
+        {
+            timeForFixedUpdates += System.DateTime.Now.TimeOfDay - lastUpdate;
+            while (timeForFixedUpdates > fixedUpdateInterval)
+            {
+
+                Console.WriteLine("Fixed Update: " + timeForFixedUpdates);
+                timeForFixedUpdates -= fixedUpdateInterval;
+            }
+            lastUpdate = System.DateTime.Now.TimeOfDay;
+        }
+
         private void Update()
         {
             var time = System.DateTime.Now.TimeOfDay;
-            Console.WriteLine((time - lastUpdate).Ticks);
-            lastUpdate = time;
+            Console.WriteLine("Update: " + (time - lastUpdate).Ticks);
         }
 
         private void Render()
