@@ -30,7 +30,6 @@ namespace GMD2Project___endless_running
 
         private static Dictionary<int, List<GMD2Project___endless_running.IComponent>> comps = new Dictionary<int, List<IComponent>>();
 
-        private int maxprio = 9;
 
         public Form1()
         {
@@ -52,6 +51,10 @@ namespace GMD2Project___endless_running
                 if (comps[component.Priority].Contains(component))
                 {
                     comps[component.Priority].Remove(component);
+                    if(comps[component.Priority].Count == 0)
+                    {
+                        comps.Remove(component.Priority);
+                    }
                 }
             }
         }

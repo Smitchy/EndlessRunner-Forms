@@ -23,13 +23,13 @@ namespace GMD2Project___endless_running
 
             form.Closed += (sender, args) => form.running = false;
 
-            MonoEntity entity = new MonoEntity();
+            /*MonoEntity entity = new MonoEntity();
 
             entity.AddComponent(new MockComponent(1));
             entity.AddComponent(new MockComponent(2));
             entity.AddComponent(new MockComponent(3));
             entity.AddComponent(new MockComponent(1));
-            entity.AddComponent(new MockComponent(5));
+            entity.AddComponent(new MockComponent(5));*/
 
             form.RunGameLoop();
         }
