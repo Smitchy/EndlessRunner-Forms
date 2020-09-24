@@ -28,9 +28,22 @@ namespace GMD2Project___endless_running
 
         private TimeSpan timeForFixedUpdates = new TimeSpan(0);
 
+        private static Dictionary<int, List<GMD2Project___endless_running.IComponent>> comps = new Dictionary<int, List<IComponent>>();
+
+        private int maxprio = 9;
+
         public Form1()
         {
             InitializeComponent();
+        }
+
+        public static void AddComponent(IComponent component, int prio)
+        {
+            if(!comps.ContainsKey(prio))
+            {
+                comps[prio] = new List<IComponent>();
+            }
+            comps[prio].Add(component);
         }
 
         private void KeysPressedSetter(object sender, KeyEventArgs e)
@@ -89,6 +102,17 @@ namespace GMD2Project___endless_running
             timeForFixedUpdates += System.DateTime.Now.TimeOfDay - lastUpdate;
             while (timeForFixedUpdates > fixedUpdateInterval)
             {
+                for(int i = 0;  i < maxprio; i++)
+                {
+                    if (comps.ContainsKey(i))
+                    {
+                        Console.WriteLine("prio: " + i);
+                        foreach(IComponent comp in comps[i])
+                        {
+                            comp.FixedUpdate();
+                        }
+                    }
+                }
 
                 Console.WriteLine("Fixed Update: " + timeForFixedUpdates);
                 timeForFixedUpdates -= fixedUpdateInterval;
@@ -99,7 +123,7 @@ namespace GMD2Project___endless_running
         private void Update()
         {
             var time = System.DateTime.Now.TimeOfDay;
-            Console.WriteLine("Update: " + (time - lastUpdate).Ticks);
+            //Console.WriteLine("Update: " + (time - lastUpdate).Ticks);
         }
 
         private void Render()
