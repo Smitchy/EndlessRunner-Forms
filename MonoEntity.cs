@@ -29,6 +29,7 @@ namespace GMD2Project___endless_running
 
         public bool RemoveComponent(IComponent component)
         {
+            Form1.RemoveComponent(component);
             return comps.Remove(component);
         }
 

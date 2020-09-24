@@ -39,11 +39,21 @@ namespace GMD2Project___endless_running
 
         public static void AddComponent(IComponent component, int prio)
         {
-            if(!comps.ContainsKey(prio))
+            if (!comps.ContainsKey(prio))
             {
                 comps[prio] = new List<IComponent>();
             }
             comps[prio].Add(component);
+        }
+        public static void RemoveComponent(IComponent component)
+        {
+            if (comps.ContainsKey(component.Priority))
+            {
+                if (comps[component.Priority].Contains(component))
+                {
+                    comps[component.Priority].Remove(component);
+                }
+            }
         }
 
         private void KeysPressedSetter(object sender, KeyEventArgs e)
@@ -73,7 +83,7 @@ namespace GMD2Project___endless_running
         {
             List<Keys> tempInputs = new List<Keys>(keysPressed);
             keysPressed.Clear();
-            foreach(Keys k in tempInputs)
+            foreach (Keys k in tempInputs)
             {
                 switch (k)
                 {
@@ -86,7 +96,7 @@ namespace GMD2Project___endless_running
 
             tempInputs = new List<Keys>(keysUnPressed);
             keysUnPressed.Clear();
-            foreach(Keys keys in tempInputs)
+            foreach (Keys keys in tempInputs)
             {
                 switch (keys)
                 {
@@ -102,18 +112,14 @@ namespace GMD2Project___endless_running
             timeForFixedUpdates += System.DateTime.Now.TimeOfDay - lastUpdate;
             while (timeForFixedUpdates > fixedUpdateInterval)
             {
-                for(int i = 0;  i < maxprio; i++)
+                foreach (var d in comps.Keys)
                 {
-                    if (comps.ContainsKey(i))
+                    Console.WriteLine("prio: " + d);
+                    foreach (IComponent comp in comps[d])
                     {
-                        Console.WriteLine("prio: " + i);
-                        foreach(IComponent comp in comps[i])
-                        {
-                            comp.FixedUpdate();
-                        }
+                        comp.FixedUpdate();
                     }
                 }
-
                 Console.WriteLine("Fixed Update: " + timeForFixedUpdates);
                 timeForFixedUpdates -= fixedUpdateInterval;
             }
