@@ -28,8 +28,9 @@ namespace GMD2Project___endless_running
 
         private TimeSpan timeForFixedUpdates = new TimeSpan(0);
 
-        private static Dictionary<int, List<GMD2Project___endless_running.IComponent>> comps = new Dictionary<int, List<IComponent>>();
-
+        private static SortedDictionary<int, List<IComponent>> comps = new SortedDictionary<int, List<IComponent>>();
+        //todo - dictionary for render components
+        //private static SortedDictionary<int, List<RenderComponent>> renderComps = new SortedDictionary<int, List<RenderComponent>>();
 
         public Form1()
         {

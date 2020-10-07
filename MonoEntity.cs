@@ -55,6 +55,12 @@ namespace GMD2Project___endless_running
                 rotation = 0;
                 scale = Vector2.One;
             }
+            public Transform(Vector2 position, float rotation, Vector2 scale)
+            {
+                this.position = position;
+                this.rotation = rotation;
+                this.scale = scale;
+            }
         }
     }
 }
