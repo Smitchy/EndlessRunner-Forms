@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
+using System.Numerics;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -24,12 +26,9 @@ namespace GMD2Project___endless_running
             form.Closed += (sender, args) => form.running = false;
 
             MonoEntity entity = new MonoEntity();
-
-            entity.AddComponent(new MockComponent(5));
-            entity.AddComponent(new MockComponent(2));
-            entity.AddComponent(new MockComponent(3));
-            entity.AddComponent(new MockComponent(1));
-            entity.AddComponent(new MockComponent(5));
+            entity.transform.scale = Vector2.One * 100;
+            entity.AddComponent(new RenderComponent(0, entity, Image.FromFile("C:/Users/Student/Documents/GitHub/EndlessRunner-Forms/images/feelsgoodman.png")));
+            entity.AddComponent(new MockComponent(0, entity));
 
             form.RunGameLoop();
         }

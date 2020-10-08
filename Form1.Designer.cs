@@ -41,23 +41,26 @@ namespace GMD2Project___endless_running
             // canvas
             // 
             this.canvas.Location = new System.Drawing.Point(0, 0);
+            this.canvas.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.canvas.Name = "canvas";
-            this.canvas.Size = new System.Drawing.Size(1268, 602);
+            this.canvas.Size = new System.Drawing.Size(1080, 1080);
             this.canvas.TabIndex = 0;
             this.canvas.TabStop = false;
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1268, 604);
+            this.ClientSize = new System.Drawing.Size(1080, 1080);
             this.Controls.Add(this.canvas);
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "Form1";
             this.Text = "Endless Runner";
-            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.KeysPressedSetter);
-            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.KeysUnPressedSetter);
+            this.KeyDown += new KeyEventHandler(Input.KeysPressedSetter);
+            this.KeyUp += new KeyEventHandler(Input.KeysReleasedSetter);
             ((System.ComponentModel.ISupportInitialize)(this.canvas)).EndInit();
             this.ResumeLayout(false);
+
         }
 
         #endregion

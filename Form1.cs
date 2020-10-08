@@ -16,10 +16,6 @@ namespace GMD2Project___endless_running
 
         public bool running;
 
-        private List<Keys> keysPressed = new List<Keys>();
-
-        private List<Keys> keysUnPressed = new List<Keys>();
-
         private TimeSpan lastUpdate = System.DateTime.Now.TimeOfDay;
 
         private bool spacePressed;
@@ -28,46 +24,64 @@ namespace GMD2Project___endless_running
 
         private TimeSpan timeForFixedUpdates = new TimeSpan(0);
 
-        private static SortedDictionary<int, List<IComponent>> comps = new SortedDictionary<int, List<IComponent>>();
+        private static SortedDictionary<int, List<MonoComponent>> comps = new SortedDictionary<int, List<MonoComponent>>();
         //todo - dictionary for render components
-        //private static SortedDictionary<int, List<RenderComponent>> renderComps = new SortedDictionary<int, List<RenderComponent>>();
+        private static SortedDictionary<int, List<RenderComponent>> renderComps = new SortedDictionary<int, List<RenderComponent>>();
 
         public Form1()
         {
             InitializeComponent();
         }
 
-        public static void AddComponent(IComponent component, int prio)
+        public static void AddComponent(MonoComponent component, int prio)
         {
-            if (!comps.ContainsKey(prio))
+            if (component.GetType() == typeof(RenderComponent))
             {
-                comps[prio] = new List<IComponent>();
-            }
-            comps[prio].Add(component);
-        }
-        public static void RemoveComponent(IComponent component)
-        {
-            if (comps.ContainsKey(component.Priority))
-            {
-                if (comps[component.Priority].Contains(component))
+                if (!renderComps.ContainsKey(prio))
                 {
-                    comps[component.Priority].Remove(component);
-                    if(comps[component.Priority].Count == 0)
+                    renderComps[prio] = new List<RenderComponent>();
+                }
+                renderComps[prio].Add((RenderComponent)component);
+            }
+            else
+            {
+                if (!comps.ContainsKey(prio))
+                {
+                    comps[prio] = new List<MonoComponent>();
+                }
+                comps[prio].Add(component);
+            }
+        }
+        public static void RemoveComponent(MonoComponent component)
+        {
+            if (component.GetType() == typeof(RenderComponent))
+            {
+                if (renderComps.ContainsKey(component.Priority))
+                {
+                    if (renderComps[component.Priority].Contains(component))
                     {
-                        comps.Remove(component.Priority);
+                        renderComps[component.Priority].Remove((RenderComponent)component);
+                        if (renderComps[component.Priority].Count == 0)
+                        {
+                            renderComps.Remove(component.Priority);
+                        }
                     }
                 }
             }
-        }
-
-        private void KeysPressedSetter(object sender, KeyEventArgs e)
-        {
-            keysPressed.Add(e.KeyCode);
-        }
-
-        private void KeysUnPressedSetter(object sender, KeyEventArgs e)
-        {
-            keysUnPressed.Add(e.KeyCode);
+            else
+            {
+                if (comps.ContainsKey(component.Priority))
+                {
+                    if (comps[component.Priority].Contains(component))
+                    {
+                        comps[component.Priority].Remove(component);
+                        if (comps[component.Priority].Count == 0)
+                        {
+                            comps.Remove(component.Priority);
+                        }
+                    }
+                }
+            }
         }
 
         internal void RunGameLoop()
@@ -85,67 +99,62 @@ namespace GMD2Project___endless_running
 
         private void HandleInput()
         {
-            List<Keys> tempInputs = new List<Keys>(keysPressed);
-            keysPressed.Clear();
-            foreach (Keys k in tempInputs)
-            {
-                switch (k)
-                {
-                    //mby add other keys but prob not.
-                    case Keys.Space:
-                        spacePressed = true;
-                        break;
-                }
-            }
-
-            tempInputs = new List<Keys>(keysUnPressed);
-            keysUnPressed.Clear();
-            foreach (Keys keys in tempInputs)
-            {
-                switch (keys)
-                {
-                    case Keys.Space:
-                        spacePressed = false;
-                        break;
-                }
-            }
+            Input.HandleInput();
         }
 
         private void FixedUpdate()
         {
-            timeForFixedUpdates += System.DateTime.Now.TimeOfDay - lastUpdate;
+            timeForFixedUpdates += DateTime.Now.TimeOfDay - lastUpdate;
             while (timeForFixedUpdates > fixedUpdateInterval)
             {
                 foreach (var d in comps.Keys)
                 {
-                    Console.WriteLine("prio: " + d);
-                    foreach (IComponent comp in comps[d])
+
+                    foreach (MonoComponent comp in comps[d])
                     {
-                        comp.FixedUpdate();
+                        if(comp.Owner.isActive)
+                            comp.FixedUpdate();
                     }
                 }
-                Console.WriteLine("Fixed Update: " + timeForFixedUpdates);
                 timeForFixedUpdates -= fixedUpdateInterval;
             }
-            lastUpdate = System.DateTime.Now.TimeOfDay;
+            lastUpdate = DateTime.Now.TimeOfDay;
         }
 
         private void Update()
         {
-            var time = System.DateTime.Now.TimeOfDay;
-            //Console.WriteLine("Update: " + (time - lastUpdate).Ticks);
+            Time.currentTime = DateTime.Now.TimeOfDay;
+            foreach (var d in comps.Keys)
+            {
+                foreach (MonoComponent comp in comps[d])
+                {
+                    if(comp.Owner.isActive)
+                        comp.Update();
+                }
+            }
+            Time.lastUpdate = DateTime.Now.TimeOfDay;
         }
 
         private void Render()
         {
             Bitmap bitmap = new Bitmap(canvas.Width, canvas.Height);
             Graphics graphics = Graphics.FromImage(bitmap);
-
-            graphics.FillRectangle(spacePressed ? new SolidBrush(Color.Crimson) : new SolidBrush(Color.Blue), 100, 100, 200, 200);
-
+            foreach(var v in renderComps.Keys)
+            {
+                foreach(RenderComponent rc in renderComps[v])
+                {
+                    if(rc.Owner.isActive)
+                        rc.Draw(graphics);
+                }
+            }
             canvas.Image = bitmap;
-
             Application.DoEvents();
         }
+    }
+    public static class Time
+    {
+        public static TimeSpan lastUpdate;
+        public static TimeSpan currentTime;
+        public static float deltaTime = (currentTime - lastUpdate).Ticks;
     }
 }

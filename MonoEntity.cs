@@ -9,36 +9,38 @@ using System.Runtime.Remoting.Messaging;
 
 namespace GMD2Project___endless_running
 {
-    class MonoEntity
+    public class MonoEntity
     {
-        private List<IComponent> comps;
+        private List<MonoComponent> comps;
         public Transform transform;
+        public bool isActive;
 
         public MonoEntity()
         {
             transform = new Transform();
-            comps = new List<IComponent>();
+            comps = new List<MonoComponent>();
+            isActive = true;
         }
 
-        public IComponent AddComponent(IComponent component)
+        public MonoComponent AddComponent(MonoComponent component)
         {
             comps.Add(component);
             Form1.AddComponent(component, component.Priority);
             return component;
         }
 
-        public bool RemoveComponent(IComponent component)
+        public bool RemoveComponent(MonoComponent component)
         {
             Form1.RemoveComponent(component);
             return comps.Remove(component);
         }
 
-        public IComponent GetComponent(IComponent c)
+        public MonoComponent GetComponent(MonoComponent c)
         {
             return comps.Where(x => x.GetType() == c.GetType()).First();
         }
 
-        public IEnumerable<IComponent> GetComponents(IComponent c)
+        public IEnumerable<MonoComponent> GetComponents(MonoComponent c)
         {
             return comps.Where(x => x.GetType() == c.GetType());
         }
