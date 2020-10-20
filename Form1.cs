@@ -112,7 +112,7 @@ namespace GMD2Project___endless_running
 
                     foreach (MonoComponent comp in comps[d])
                     {
-                        if(comp.Owner.isActive)
+                        if (comp.Owner.isActive)
                             comp.FixedUpdate();
                     }
                 }
@@ -128,7 +128,7 @@ namespace GMD2Project___endless_running
             {
                 foreach (MonoComponent comp in comps[d])
                 {
-                    if(comp.Owner.isActive)
+                    if (comp.Owner.isActive)
                         comp.Update();
                 }
             }
@@ -139,16 +139,17 @@ namespace GMD2Project___endless_running
         {
             Bitmap bitmap = new Bitmap(canvas.Width, canvas.Height);
             Graphics graphics = Graphics.FromImage(bitmap);
-            foreach(var v in renderComps.Keys)
+            foreach (var v in renderComps.Keys)
             {
-                foreach(RenderComponent rc in renderComps[v])
+                foreach (RenderComponent rc in renderComps[v])
                 {
-                    if(rc.Owner.isActive)
+                    if (rc.Owner.isActive)
                         rc.Draw(graphics);
                 }
             }
             canvas.Image = bitmap;
             Application.DoEvents();
+
         }
     }
     public static class Time
