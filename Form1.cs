@@ -124,30 +124,86 @@ namespace GMD2Project___endless_running
         private void Update()
         {
             Time.currentTime = DateTime.Now.TimeOfDay;
-            foreach (var d in comps.Keys)
+
+            for (int i = 0; i < comps.Keys.Count; i++)
             {
-                foreach (MonoComponent comp in comps[d])
+                KeyValuePair<int, List<MonoComponent>> kvP = comps.ElementAt(i);
+
+                for (int v = 0; v < kvP.Value.Count; v++)
                 {
+                    if (v < 0)
+                        break;
+
+                    MonoComponent comp = kvP.Value[v];
+
                     if (comp.Owner.isActive)
                         comp.Update();
+                    if (comp.Owner.isDestroyed)
+                    {
+                        comp.Owner.RemoveComponent(comp);
+                        v--;
+                    }
                 }
+                if (kvP.Value.Count == 0)
+                    i--;
             }
             Time.lastUpdate = DateTime.Now.TimeOfDay;
         }
 
+        private Bitmap bitmap;
+        Graphics graphics;
+        bool blankScreen;
+
         private void Render()
         {
-            Bitmap bitmap = new Bitmap(canvas.Width, canvas.Height);
-            Graphics graphics = Graphics.FromImage(bitmap);
-            foreach (var v in renderComps.Keys)
+            if (renderComps.Count > 0)
             {
-                foreach (RenderComponent rc in renderComps[v])
+                
+                Bitmap temp = new Bitmap(canvas.Width, canvas.Height);
+                graphics = Graphics.FromImage(temp);
+
+                for (int i = 0; i < renderComps.Keys.Count; i++)
                 {
-                    if (rc.Owner.isActive)
-                        rc.Draw(graphics);
+                    KeyValuePair<int, List<RenderComponent>> kvP = renderComps.ElementAt(i);
+
+                    for (int v = 0; v < kvP.Value.Count; v++)
+                    {
+                        if (v < 0)
+                            break;
+
+                        RenderComponent rc = kvP.Value[v];
+
+                        if (rc.Owner.isActive)
+                        {
+                            rc.Draw(graphics);
+                            
+
+                        }
+                        if (rc.Owner.isDestroyed)
+                        {
+                            rc.Owner.RemoveComponent(rc);
+                            v--;
+                        }
+                    }
+                    if (kvP.Value.Count == 0)
+                        i--;
                 }
+                blankScreen = false;
+                canvas.Image = temp;
+                bitmap.Dispose();
+                bitmap = temp;
+                
             }
-            canvas.Image = bitmap;
+            else if (!blankScreen)
+            {
+                Bitmap temp = new Bitmap(canvas.Width, canvas.Height);
+                graphics = Graphics.FromImage(temp);
+                canvas.Image = temp;
+                bitmap.Dispose();
+                bitmap = temp;
+                blankScreen = true;
+            }
+
             Application.DoEvents();
 
         }
@@ -156,6 +212,7 @@ namespace GMD2Project___endless_running
     {
         public static TimeSpan lastUpdate;
         public static TimeSpan currentTime;
-        public static float deltaTime = (currentTime - lastUpdate).Ticks;
+        public static float deltaTime => (currentTime - lastUpdate).Milliseconds;
+
     }
 }

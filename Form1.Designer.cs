@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Windows.Forms;
 
 namespace GMD2Project___endless_running
@@ -11,6 +12,7 @@ namespace GMD2Project___endless_running
         private System.ComponentModel.IContainer components = null;
 
         private System.Windows.Forms.PictureBox canvas;
+
 
 
         /// <summary>
@@ -49,6 +51,7 @@ namespace GMD2Project___endless_running
             // 
             // Form1
             // 
+            this.bitmap = new Bitmap(canvas.Width, canvas.Height);
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1080, 1080);
