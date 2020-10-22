@@ -20,7 +20,7 @@ namespace GMD2Project___endless_running
         public void Draw(Graphics g)
         {
            
-            if(rotation != Owner.transform.rotation)
+            /*if(rotation != Owner.transform.rotation)
             {
                 var rotDif = Owner.transform.rotation - rotation;
                 switch (rotDif)
@@ -34,7 +34,7 @@ namespace GMD2Project___endless_running
                         break;
                 }
                 rotation = Owner.transform.rotation;
-            }
+            }*/
             g.DrawImage(sprite, Owner.transform.position.X, Owner.transform.position.Y, Owner.transform.scale.X,Owner.transform.scale.Y);
         }
 

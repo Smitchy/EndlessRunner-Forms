@@ -72,10 +72,12 @@ namespace GMD2Project___endless_running
     public class Obstacle : MonoComponent
     {
 
-        public float speed;
+        public double speed;
+        private DateTime startTimeSeconds;
         public Obstacle(int prio) : base(prio)
         {
-            speed = .2f;
+            startTimeSeconds = DateTime.Now;
+            speed = 0.5;
         }
 
         public override void FixedUpdate()
@@ -85,9 +87,15 @@ namespace GMD2Project___endless_running
 
         public override void Update()
         {
-            Owner.transform.position.X -= speed * Time.deltaTime;
+            Owner.transform.position.X -= (float)speed * Time.deltaTime;
             if (Owner.transform.position.X < 0)
-                Owner.Destroy();
+            {
+                Owner.transform.position.X = 1000;
+                Owner.transform.position.Y = RandomHelper.rand.Next(0,900);
+                speed = Math.Log(DateTime.Now.Subtract(startTimeSeconds).TotalSeconds) + 0.5;
+                speed /= RandomHelper.rand.Next(5, 20);
+                Console.WriteLine(speed);
+            }
             
             
         }
@@ -95,13 +103,12 @@ namespace GMD2Project___endless_running
 
     public class ObstacleSpawner : MonoComponent
     {
-        Image bullet = Image.FromFile(AppDomain.CurrentDomain.BaseDirectory + "../../images/feelsgoodman.png");
-        Random rand = new Random();
+        Image bullet = Image.FromFile(AppDomain.CurrentDomain.BaseDirectory + "../../images/boulder.png");
         public ObstacleSpawner(int prio) : base(prio)
         {
-            for (int i = 0; i < 30; i++)
+            for (int i = 0; i < 15; i++)
             {
-                CreateObstacle(new Vector2(1000, rand.Next(0, 1000)));
+                CreateObstacle(new Vector2(1000, RandomHelper.rand.Next(0, 900)));
             }
         }
 
@@ -111,8 +118,7 @@ namespace GMD2Project___endless_running
 
         public override void Update()
         {
-            //CreateObstacle(new Vector2(1000,rand.Next(0,1000)));
-           
+      
         }
         private MonoEntity CreateObstacle(Vector2 pos)
         {

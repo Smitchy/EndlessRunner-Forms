@@ -27,7 +27,6 @@ namespace GMD2Project___endless_running
         private static SortedDictionary<int, List<MonoComponent>> comps = new SortedDictionary<int, List<MonoComponent>>();
         //todo - dictionary for render components
         private static SortedDictionary<int, List<RenderComponent>> renderComps = new SortedDictionary<int, List<RenderComponent>>();
-
         public Form1()
         {
             InitializeComponent();
@@ -153,12 +152,12 @@ namespace GMD2Project___endless_running
         private Bitmap bitmap;
         Graphics graphics;
         bool blankScreen;
-
+        private int counter = 0;
         private void Render()
         {
             if (renderComps.Count > 0)
             {
-                
+
                 Bitmap temp = new Bitmap(canvas.Width, canvas.Height);
                 graphics = Graphics.FromImage(temp);
 
@@ -176,7 +175,7 @@ namespace GMD2Project___endless_running
                         if (rc.Owner.isActive)
                         {
                             rc.Draw(graphics);
-                            
+
 
                         }
                         if (rc.Owner.isDestroyed)
@@ -192,7 +191,6 @@ namespace GMD2Project___endless_running
                 canvas.Image = temp;
                 bitmap.Dispose();
                 bitmap = temp;
-                
             }
             else if (!blankScreen)
             {
@@ -203,6 +201,13 @@ namespace GMD2Project___endless_running
                 bitmap = temp;
                 blankScreen = true;
             }
+            if (counter == 100)
+            {
+                GC.Collect();
+                counter = 0;
+            }
+            else
+                counter++;
 
             Application.DoEvents();
 
