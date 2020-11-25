@@ -22,9 +22,10 @@ namespace GMD2Project___endless_running
         public abstract void FixedUpdate();
         public abstract void Update();
 
-        protected MonoComponent(int prio)
+        protected MonoComponent(int prio, MonoEntity owner)
         {
             this.priority = prio;
+            owner.AddComponent(this);
             isActive = true;
         }
     }
@@ -33,15 +34,23 @@ namespace GMD2Project___endless_running
     public class PlayerMovement : MonoComponent
     {
         public float speed;
-        public PlayerMovement(int prio) : base( prio)
+        public PlayerMovement(int prio, MonoEntity owner) : base( prio, owner)
         {
             speed = 0.5f;
+            ((CircleCollider)Owner.GetComponent(typeof(CircleCollider))).OnCollisionEvent += OnCollision;
         }
 
         public override void FixedUpdate()
         {
  
         }
+
+        public void OnCollision(CircleCollider other)
+        {
+            this.Owner.Destroy();
+        }
+
+
         public override void Update()
         {
             if (Input.OnKeyPressed(Keys.Space))
@@ -74,10 +83,11 @@ namespace GMD2Project___endless_running
 
         public double speed;
         private DateTime startTimeSeconds;
-        public Obstacle(int prio) : base(prio)
+        public Obstacle(int prio, MonoEntity owner) : base(prio, owner)
         {
             startTimeSeconds = DateTime.Now;
-            speed = 0.5;
+            speed = 1;
+            speed /= RandomHelper.rand.Next(5, 20);
         }
 
         public override void FixedUpdate()
@@ -94,7 +104,6 @@ namespace GMD2Project___endless_running
                 Owner.transform.position.Y = RandomHelper.rand.Next(0,900);
                 speed = Math.Log(DateTime.Now.Subtract(startTimeSeconds).TotalSeconds) + 0.5;
                 speed /= RandomHelper.rand.Next(5, 20);
-                Console.WriteLine(speed);
             }
             
             
@@ -104,7 +113,7 @@ namespace GMD2Project___endless_running
     public class ObstacleSpawner : MonoComponent
     {
         Image bullet = Image.FromFile(AppDomain.CurrentDomain.BaseDirectory + "../../images/boulder.png");
-        public ObstacleSpawner(int prio) : base(prio)
+        public ObstacleSpawner(int prio, MonoEntity owner) : base(prio, owner)
         {
             for (int i = 0; i < 15; i++)
             {
@@ -122,13 +131,13 @@ namespace GMD2Project___endless_running
         }
         private MonoEntity CreateObstacle(Vector2 pos)
         {
-            Obstacle obs = new Obstacle(1);
             MonoEntity ent = new MonoEntity("bullet");
             ent.transform.position = pos;
             ent.transform.scale = Vector2.One * 100;
-            ent.AddComponent(new RenderComponent(1, bullet));
-            ent.AddComponent(obs);
-
+            new Obstacle(1, ent);
+            new RenderComponent(1, ent, bullet);
+            new CircleCollider(Priority, ent, bullet.Width/2, new List<int>(0));
+            
             return ent;
         }
     }

@@ -12,7 +12,7 @@ namespace GMD2Project___endless_running
         public Image sprite { get; set; }
         public float rotation = -1f;
 
-        public RenderComponent(int prio,Image s) : base(prio)
+        public RenderComponent(int prio, MonoEntity owner, Image s) : base(prio, owner)
         {
             sprite = s;
 
@@ -35,7 +35,7 @@ namespace GMD2Project___endless_running
                 }
                 rotation = Owner.transform.rotation;
             }*/
-            g.DrawImage(sprite, Owner.transform.position.X, Owner.transform.position.Y, Owner.transform.scale.X,Owner.transform.scale.Y);
+            g.DrawImage(sprite, Owner.transform.position.X - (sprite.Width/2), Owner.transform.position.Y - (sprite.Width / 2), Owner.transform.scale.X, Owner.transform.scale.Y);
         }
 
         public override void FixedUpdate()

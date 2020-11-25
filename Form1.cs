@@ -27,6 +27,8 @@ namespace GMD2Project___endless_running
         private static SortedDictionary<int, List<MonoComponent>> comps = new SortedDictionary<int, List<MonoComponent>>();
         //todo - dictionary for render components
         private static SortedDictionary<int, List<RenderComponent>> renderComps = new SortedDictionary<int, List<RenderComponent>>();
+        public static SortedDictionary<int, List<CircleCollider>> colliderComps = new SortedDictionary<int, List<CircleCollider>>();
+
         public Form1()
         {
             InitializeComponent();
@@ -41,6 +43,14 @@ namespace GMD2Project___endless_running
                     renderComps[prio] = new List<RenderComponent>();
                 }
                 renderComps[prio].Add((RenderComponent)component);
+            }
+            else if(component.GetType() == typeof(CircleCollider))
+            {
+                if (!colliderComps.ContainsKey(prio))
+                {
+                    colliderComps[prio] = new List<CircleCollider>();
+                }
+                colliderComps[prio].Add((CircleCollider)component);
             }
             else
             {
@@ -63,6 +73,20 @@ namespace GMD2Project___endless_running
                         if (renderComps[component.Priority].Count == 0)
                         {
                             renderComps.Remove(component.Priority);
+                        }
+                    }
+                }
+            }
+            else if (component.GetType() == typeof(CircleCollider))
+            {
+                if (colliderComps.ContainsKey(component.Priority))
+                {
+                    if (colliderComps[component.Priority].Contains(component))
+                    {
+                        colliderComps[component.Priority].Remove((CircleCollider)component);
+                        if (colliderComps[component.Priority].Count == 0)
+                        {
+                            colliderComps.Remove(component.Priority);
                         }
                     }
                 }
@@ -108,13 +132,15 @@ namespace GMD2Project___endless_running
             {
                 foreach (var d in comps.Keys)
                 {
-
                     foreach (MonoComponent comp in comps[d])
                     {
                         if (comp.Owner.isActive)
                             comp.FixedUpdate();
                     }
                 }
+
+                colliderComps[0][0].CollisionCheck(colliderComps[1]);
+
                 timeForFixedUpdates -= fixedUpdateInterval;
             }
             lastUpdate = DateTime.Now.TimeOfDay;

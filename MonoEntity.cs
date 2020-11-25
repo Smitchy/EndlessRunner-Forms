@@ -41,9 +41,9 @@ namespace GMD2Project___endless_running
             return comps.Remove(component);
         }
 
-        public MonoComponent GetComponent(MonoComponent c)
+        public MonoComponent GetComponent(Type c)
         {
-            return comps.Where(x => x.GetType() == c.GetType()).First();
+            return comps.Where(x => x.GetType() == c).First();
         }
 
         public IEnumerable<MonoComponent> GetComponents(MonoComponent c)
