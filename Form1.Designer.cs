@@ -45,16 +45,21 @@ namespace GMD2Project___endless_running
             this.canvas.Location = new System.Drawing.Point(0, 0);
             this.canvas.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.canvas.Name = "canvas";
-            this.canvas.Size = new System.Drawing.Size(1080, 1080);
+            this.canvas.Size = new System.Drawing.Size(900, 900);
             this.canvas.TabIndex = 0;
             this.canvas.TabStop = false;
             // 
             // Form1
             // 
+            this.StartPosition = FormStartPosition.Manual;
+            this.Location = new Point(0, 0);
+            this.FormBorderStyle = FormBorderStyle.FixedSingle;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.bitmap = new Bitmap(canvas.Width, canvas.Height);
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1080, 1080);
+            this.ClientSize = new System.Drawing.Size(900, 900);
             this.Controls.Add(this.canvas);
             this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "Form1";

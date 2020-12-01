@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GMD2Project___endless_running
 {
-    class RenderComponent : MonoComponent
+    public class RenderComponent : MonoComponent
     {
         public Image sprite { get; set; }
         public float rotation = -1f;
@@ -17,7 +17,7 @@ namespace GMD2Project___endless_running
             sprite = s;
 
         }
-        public void Draw(Graphics g)
+        public virtual void Draw(Graphics g)
         {
            
             /*if(rotation != Owner.transform.rotation)

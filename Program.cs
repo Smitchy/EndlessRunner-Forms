@@ -26,20 +26,18 @@ namespace GMD2Project___endless_running
 
             form.Closed += (sender, args) => form.running = false;
             Image img = Image.FromFile(AppDomain.CurrentDomain.BaseDirectory + "../../images/feelsgoodman.png");
-            Image img2 = Image.FromFile(AppDomain.CurrentDomain.BaseDirectory + "../../images/feelsgoodman.png");
-            
+            Image img2 = Image.FromFile(AppDomain.CurrentDomain.BaseDirectory + "../../images/feelsgoodman.png");            
             MonoEntity entity = new MonoEntity("player");
-            entity.transform.scale = Vector2.One * 100;
-           
+            entity.transform.scale = Vector2.One * 100;           
             new RenderComponent(20, entity, img);
             new CircleCollider(0, entity, img.Width / 2, new List<int>(1));
             new PlayerMovement(0, entity);
-
             MonoEntity mapEntity = new MonoEntity("map");
             new ObstacleSpawner(1, mapEntity);
             new RenderComponent(1, mapEntity, img2);
-
-
+            MonoEntity scoreEnt = new MonoEntity("score");            
+            new ScoreComp(21, scoreEnt);
+            
             form.RunGameLoop();
            
         }

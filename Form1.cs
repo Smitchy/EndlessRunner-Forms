@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -18,8 +19,6 @@ namespace GMD2Project___endless_running
 
         private TimeSpan lastUpdate = System.DateTime.Now.TimeOfDay;
 
-        private bool spacePressed;
-
         private TimeSpan fixedUpdateInterval = new TimeSpan(166667);
 
         private TimeSpan timeForFixedUpdates = new TimeSpan(0);
@@ -33,18 +32,28 @@ namespace GMD2Project___endless_running
         {
             InitializeComponent();
         }
-
+        public static void Reset()
+        {
+            comps = new SortedDictionary<int, List<MonoComponent>>();
+            renderComps = new SortedDictionary<int, List<RenderComponent>>();
+            colliderComps = new SortedDictionary<int, List<CircleCollider>>();
+            MonoEntity newGame = new MonoEntity("ResetInstance");
+            new ResetListener(0, newGame);
+            newGame.transform.position = new Vector2(200, 300);
+        }
         public static void AddComponent(MonoComponent component, int prio)
         {
-            if (component.GetType() == typeof(RenderComponent))
+            if (component.GetType() == typeof(RenderComponent) || component.GetType().IsSubclassOf(typeof(RenderComponent)))
             {
+
+                Console.WriteLine("added " + component.Owner.name);
                 if (!renderComps.ContainsKey(prio))
                 {
                     renderComps[prio] = new List<RenderComponent>();
                 }
                 renderComps[prio].Add((RenderComponent)component);
             }
-            else if(component.GetType() == typeof(CircleCollider))
+            else if (component.GetType() == typeof(CircleCollider))
             {
                 if (!colliderComps.ContainsKey(prio))
                 {
@@ -63,7 +72,7 @@ namespace GMD2Project___endless_running
         }
         public static void RemoveComponent(MonoComponent component)
         {
-            if (component.GetType() == typeof(RenderComponent))
+            if (component.GetType() == typeof(RenderComponent) || component.GetType().IsSubclassOf(typeof(RenderComponent)))
             {
                 if (renderComps.ContainsKey(component.Priority))
                 {
@@ -138,8 +147,8 @@ namespace GMD2Project___endless_running
                             comp.FixedUpdate();
                     }
                 }
-
-                colliderComps[0][0].CollisionCheck(colliderComps[1]);
+                if (colliderComps.Count > 0)
+                    colliderComps[0][0].CollisionCheck(colliderComps[1]);
 
                 timeForFixedUpdates -= fixedUpdateInterval;
             }

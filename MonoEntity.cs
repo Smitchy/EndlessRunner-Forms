@@ -30,8 +30,8 @@ namespace GMD2Project___endless_running
         public MonoComponent AddComponent(MonoComponent component)
         {
             comps.Add(component);
-            Form1.AddComponent(component, component.Priority);
             component.Owner = this;
+            Form1.AddComponent(component, component.Priority);
             return component;
         }
 
