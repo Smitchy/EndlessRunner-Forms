@@ -154,7 +154,7 @@ namespace GMD2Project___endless_running
             lastUpdate = DateTime.Now.TimeOfDay;
         }
 
-        private void Update()
+        private new void Update()
         {
             Time.currentTime = DateTime.Now.TimeOfDay;
 

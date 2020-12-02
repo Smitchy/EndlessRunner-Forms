@@ -97,7 +97,7 @@ namespace GMD2Project___endless_running
 
     public class ObstacleSpawner : MonoComponent
     {
-        Image bullet = Image.FromFile(AppDomain.CurrentDomain.BaseDirectory + "../../images/boulder.png");
+        Image bullet = Image.FromFile(AppDomain.CurrentDomain.BaseDirectory + "../../images/boulder2.png");
         public ObstacleSpawner(int prio, MonoEntity owner) : base(prio, owner)
         {
             for (int i = 0; i < 15; i++)
