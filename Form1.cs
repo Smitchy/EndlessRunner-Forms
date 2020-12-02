@@ -38,15 +38,14 @@ namespace GMD2Project___endless_running
             renderComps = new SortedDictionary<int, List<RenderComponent>>();
             colliderComps = new SortedDictionary<int, List<CircleCollider>>();
             MonoEntity newGame = new MonoEntity("ResetInstance");
-            new ResetListener(0, newGame);
+            ResetListener resListener = new ResetListener(0, newGame);
+            new ResetHandler(0, newGame);
             newGame.transform.position = new Vector2(200, 300);
         }
         public static void AddComponent(MonoComponent component, int prio)
         {
             if (component.GetType() == typeof(RenderComponent) || component.GetType().IsSubclassOf(typeof(RenderComponent)))
             {
-
-                Console.WriteLine("added " + component.Owner.name);
                 if (!renderComps.ContainsKey(prio))
                 {
                     renderComps[prio] = new List<RenderComponent>();

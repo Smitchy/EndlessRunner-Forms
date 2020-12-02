@@ -18,10 +18,14 @@ namespace GMD2Project___endless_running
         private int priority;
         public int Priority { get => priority; }
         public bool isActive;
+        public virtual void FixedUpdate()
+        {
 
-        public abstract void FixedUpdate();
-        public abstract void Update();
+        }
+        public virtual void Update()
+        {
 
+        }
         protected MonoComponent(int prio, MonoEntity owner)
         {
             this.priority = prio;
@@ -29,8 +33,6 @@ namespace GMD2Project___endless_running
             isActive = true;
         }
     }
-
-
     public class PlayerMovement : MonoComponent
     {
         public float speed;
@@ -39,19 +41,11 @@ namespace GMD2Project___endless_running
             speed = 0.5f;
             ((CircleCollider)Owner.GetComponent(typeof(CircleCollider))).OnCollisionEvent += OnCollision;
         }
-
-        public override void FixedUpdate()
-        {
-
-        }
-
         public void OnCollision(CircleCollider other)
         {
             Form1.Reset();
 
         }
-
-
         public override void Update()
         {
             if (Input.OnKeyHeld(Keys.W))
@@ -76,7 +70,6 @@ namespace GMD2Project___endless_running
             }
         }
     }
-
     public class Obstacle : MonoComponent
     {
 
@@ -88,12 +81,6 @@ namespace GMD2Project___endless_running
             speed = 1;
             speed /= RandomHelper.rand.Next(5, 20);
         }
-
-        public override void FixedUpdate()
-        {
-
-        }
-
         public override void Update()
         {
             Owner.transform.position.X -= (float)speed * Time.deltaTime;
@@ -105,8 +92,6 @@ namespace GMD2Project___endless_running
                 speed /= RandomHelper.rand.Next(5, 20);
                 ScoreComp.instance.IncrementScore();
             }
-
-
         }
     }
 
@@ -120,15 +105,6 @@ namespace GMD2Project___endless_running
                 CreateObstacle(new Vector2(1000, RandomHelper.rand.Next(0, 900)));
             }
         }
-
-        public override void FixedUpdate()
-        {
-        }
-
-        public override void Update()
-        {
-
-        }
         private MonoEntity CreateObstacle(Vector2 pos)
         {
             MonoEntity ent = new MonoEntity("bullet");
@@ -137,88 +113,23 @@ namespace GMD2Project___endless_running
             new Obstacle(1, ent);
             new RenderComponent(1, ent, bullet);
             new CircleCollider(Priority, ent, bullet.Width / 2, new List<int>(0));
-
             return ent;
         }
     }
-
-    public class ScoreComp : RenderComponent
+    public class ResetHandler : MonoComponent
     {
-        public static ScoreComp instance;
-        private int score;
-        private readonly string scoreText;
-        public ScoreComp(int prio, MonoEntity owner) : base(prio, owner, null)
+        public ResetListener ResetListener;
+        public ResetHandler(int prio, MonoEntity owner) : base(prio, owner)
         {
-            if (instance == null || instance != this)
-            {
-                instance = this;
-            }
-            scoreText = "Your score: ";
-            ResetScore();
+            ResetListener = (ResetListener)owner.GetComponent(typeof(ResetListener));
         }
-        public void IncrementScore()
-        {
-
-            score++;
-        }
-
-        public void ResetScore()
-        {
-            score = 0;
-        }
-
-        public override void Draw(Graphics g)
-        {
-            g.DrawString(scoreText + score.ToString(), new Font(FontFamily.GenericSerif, 24), new SolidBrush(Color.Blue), new Point((int)Owner.transform.position.X, (int)Owner.transform.position.Y));
-        }
-        public override void FixedUpdate()
-        {
-
-        }
-
         public override void Update()
-        {
-
-        }
-    }
-
-    public class ResetListener : RenderComponent
-    {
-        public ResetListener(int prio, MonoEntity owner) : base(prio, owner, null)
-        {
-
-        }
-
-        public override void Draw(Graphics g)
         {
             if (Input.OnKeyReleased(Keys.Space))
             {
-                Console.Write("Test");
-                Image img = Image.FromFile(AppDomain.CurrentDomain.BaseDirectory + "../../images/feelsgoodman.png");
-                Image img2 = Image.FromFile(AppDomain.CurrentDomain.BaseDirectory + "../../images/feelsgoodman.png");
-                MonoEntity entity = new MonoEntity("player");
-                entity.transform.scale = Vector2.One * 100;
-                new RenderComponent(20, entity, img);
-                new CircleCollider(0, entity, img.Width / 2, new List<int>(1));
-                new PlayerMovement(0, entity);
-                MonoEntity mapEntity = new MonoEntity("map");
-                new ObstacleSpawner(1, mapEntity);
-                new RenderComponent(1, mapEntity, img2);
-                MonoEntity scoreEnt = new MonoEntity("score");
-                new ScoreComp(21, scoreEnt);
-
+                ResetListener.Reset();
                 Owner.RemoveComponent(this);
             }
-            g.DrawString("FEELSBADMAN", new Font(FontFamily.GenericSerif, 50), new SolidBrush(Color.Red), new Point((int)Owner.transform.position.X, (int)Owner.transform.position.Y));
-        }
-        public override void FixedUpdate()
-        {
-
-        }
-
-        public override void Update()
-        {
-
         }
     }
 }
