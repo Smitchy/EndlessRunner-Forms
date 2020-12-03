@@ -11,20 +11,16 @@ namespace GMD2Project___endless_running
 {
     static class Program
     {
-        /// <summary>
-        /// The main entry point for the application.
-        /// </summary>
         [STAThread]
         static void Main()
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-
             Form1 form = new Form1();
-
             form.Show();
-
             form.Closed += (sender, args) => form.running = false;
+
+            //Entities and Components
             Image img = Image.FromFile(AppDomain.CurrentDomain.BaseDirectory + "../../images/feelsgoodman.png");         
             MonoEntity entity = new MonoEntity("player");
             entity.transform.scale = Vector2.One * 100;           
@@ -36,8 +32,8 @@ namespace GMD2Project___endless_running
             MonoEntity scoreEnt = new MonoEntity("score");            
             new ScoreComp(21, scoreEnt);
             
-            form.RunGameLoop();
-           
+            //Game loop
+            form.RunGameLoop();           
         }
     }
 }

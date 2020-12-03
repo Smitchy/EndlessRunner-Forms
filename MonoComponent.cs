@@ -44,7 +44,6 @@ namespace GMD2Project___endless_running
         public void OnCollision(CircleCollider other)
         {
             Form1.Reset();
-
         }
         public override void Update()
         {
@@ -97,9 +96,10 @@ namespace GMD2Project___endless_running
 
     public class ObstacleSpawner : MonoComponent
     {
-        Image bullet = Image.FromFile(AppDomain.CurrentDomain.BaseDirectory + "../../images/boulder2.png");
+        private Image boulder;
         public ObstacleSpawner(int prio, MonoEntity owner) : base(prio, owner)
         {
+            boulder = Image.FromFile(AppDomain.CurrentDomain.BaseDirectory + "../../images/boulder2.png");
             for (int i = 0; i < 15; i++)
             {
                 CreateObstacle(new Vector2(1000, RandomHelper.rand.Next(0, 900)));
@@ -111,8 +111,8 @@ namespace GMD2Project___endless_running
             ent.transform.position = pos;
             ent.transform.scale = Vector2.One * 100;
             new Obstacle(1, ent);
-            new RenderComponent(1, ent, bullet);
-            new CircleCollider(Priority, ent, bullet.Width / 2, new List<int>(0));
+            new RenderComponent(1, ent, boulder);
+            new CircleCollider(Priority, ent, boulder.Width / 2, new List<int>(0));
             return ent;
         }
     }
